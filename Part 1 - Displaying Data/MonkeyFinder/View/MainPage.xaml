@@ -1,7 +1,72 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- register with page created monkey view model and title-->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:MonkeyFinder.Model"
+             xmlns:viewmodel="clr-namespace:MonkeyFinder.ViewModel"
+             x:DataType="viewmodel:MonkeysViewModel"
+             Title="{Binding Title}"
              x:Class="MonkeyFinder.View.MainPage">
+    
+    <!-- Create grid with two columns and auto row amount -->
+    <Grid ColumnDefinitions="*,*"
+          ColumnSpacing="5"
+          RowDefinitions="*,Auto"
+          RowSpacing="0">
 
+        <!-- Create collection view across both collumns which will display defined data of all monkeys stored inside observable collection of monkeys -->
+        <CollectionView BackgroundColor="Transparent"
+                        Grid.ColumnSpan="2"
+                        ItemsSource="{Binding Monkeys}"
+                        SelectionMode="None">
+            
+            <!-- Create template what to display for each monkey -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Monkey">
+                    <!-- Create second grid with one column inside collection view -->
+                    <Grid Padding="10">
+                        <!-- Inside second grid create frame for each monkey with height of 125 -->
+                        <Frame HeightRequest="125">
+                            <!-- Create third grid with two columns with first one being 125 wide -->
+                            <Grid Padding="0" ColumnDefinitions="125, *">
+
+                                <!-- Display image of monkey -->
+                                <Image Aspect="AspectFill"
+                                       Source="{Binding Image}"
+                                       WidthRequest="125"
+                                       HeightRequest="125"/>
+
+                                <!-- Create vertical stack layout in second column to display name aand location of monkey-->
+                                <VerticalStackLayout Grid.Column="1" Padding="10" VerticalOptions="Center">
+
+                                    <Label Text="{Binding Name}"/>
+                                    <Label Text="{Binding Location}"/>
+
+                                </VerticalStackLayout>
+
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!-- Create button to call upon GetMonkeysCommand(found in command generator) when is IsNotBusy, initiates monkey view model code-->
+        <Button Text="Get Monkeys"
+                Command="{Binding GetMonkeysCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Row="1"
+                Margin="8"/>
+        
+        <!-- Loading indicator when monkey data is retreived from server -->
+        <ActivityIndicator IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           Grid.RowSpan="2"
+                           Grid.ColumnSpan="2"/>
+
+    </Grid>
     
 </ContentPage>

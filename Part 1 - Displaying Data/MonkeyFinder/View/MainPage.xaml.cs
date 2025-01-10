@@ -2,9 +2,11 @@
 
 public partial class MainPage : ContentPage
 {
-	public MainPage()
+	// bind monkey view model to main page of app
+	public MainPage(MonkeysViewModel viewModel)
 	{
 		InitializeComponent();
+		BindingContext = viewModel;
 	}
 }
 
