@@ -23,8 +23,10 @@ public static class MauiProgram
         // register all dependencies so that app knows what to start off with
 		builder.Services.AddSingleton<MonkeyService>();
         builder.Services.AddSingleton<MonkeysViewModel>();
+        builder.Services.AddTransient<MonkeyDetailsViewModel>();
         builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddTransient<DetailsPage>();
 
-		return builder.Build();
+        return builder.Build();
 	}
 }

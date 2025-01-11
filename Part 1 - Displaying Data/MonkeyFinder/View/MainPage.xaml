@@ -27,7 +27,13 @@
                     <Grid Padding="10">
                         <!-- Inside second grid create frame for each monkey with height of 125 -->
                         <Frame HeightRequest="125">
-                            <!-- Create third grid with two columns with first one being 125 wide -->
+                            <!-- Use gesture recognisition to make frame with monkey interactable -->
+                            <Frame.GestureRecognizers>
+                                <!-- Use tap gesture and bind it to itself, while command consisist for this from view model where function exists and command itself -->
+                                <TapGestureRecognizer CommandParameter="{Binding .}" 
+                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MonkeysViewModel}}, Path=GoToDetailsCommand}"/>
+                            </Frame.GestureRecognizers>
+                                    <!-- Create third grid with two columns with first one being 125 wide -->
                             <Grid Padding="0" ColumnDefinitions="125, *">
 
                                 <!-- Display image of monkey -->

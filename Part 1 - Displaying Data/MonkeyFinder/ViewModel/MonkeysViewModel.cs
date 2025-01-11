@@ -19,6 +19,22 @@ public partial class MonkeysViewModel : BaseViewModel
 
     }
 
+    // RelayCommand is part pf mvvm generated code which converts asynchroniase function GoToDetailsAsync being callable through event handler
+    // Runs each time when monkey is clicked on main page and directs to create details page for clicked monkey
+    [RelayCommand]
+    async Task GoToDetailsAsync(Monkey monkey)
+    {
+        // if there is no monkey do nothing
+        if (monkey == null) return;
+
+        // takes current monkey object and pass it to details page
+        await Shell.Current.GoToAsync($"{nameof(DetailsPage)}", true, new Dictionary<string, object>
+        {
+            {"Monkey", monkey }
+        });
+    }
+
+
     // RelayCommand is part pf mvvm generated code which converts asynchroniase function GetMonkeysAsync being callable through event handler
     // Runs each time button to retreive monkeys is pressed
     [RelayCommand]

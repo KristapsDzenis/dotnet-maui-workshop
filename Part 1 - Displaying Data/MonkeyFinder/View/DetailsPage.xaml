@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- register with page created monkey details view model and title being name of current monkey-->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MonkeyFinder.DetailsPage">
+             x:Class="MonkeyFinder.DetailsPage"
+             xmlns:viewmodel="clr-namespace:MonkeyFinder.ViewModel"
+             x:DataType="viewmodel:MonkeyDetailsViewModel"
+             Title="{Binding Monkey.Name}">
+
+    <!-- Wrap all page into srollview to allow page to be scrolled -->
+    <ScrollView>
+        <!-- Create vertical stack layout -->
+        <VerticalStackLayout>
+            <!-- Create grid with three columns and two rows, top row being 160 high -->
+            <Grid ColumnDefinitions="*,Auto,*"
+                  RowDefinitions="160, Auto">
+                
+                <!-- Create boxview across all columns and in top row, this serves as banner -->
+                <BoxView BackgroundColor="Orange"
+                         Grid.ColumnSpan="3"
+                         HeightRequest="160"
+                         HorizontalOptions="FillAndExpand"/>
+                
+                <!-- Create round frame across both rows and to be in center of both rows and to be in middle column  -->
+                <Frame Grid.RowSpan="2" 
+                       Grid.Column="1"
+                       HeightRequest="160"
+                       WidthRequest="160"
+                       CornerRadius="80"
+                       HorizontalOptions="Center"
+                       IsClippedToBounds="True"
+                       Padding="0"
+                       Margin="0,80,0,0">
+
+                    <!-- Place image of current monkey inside a frame -->
+                    <Image Aspect="AspectFill"
+                           HeightRequest="160"
+                           WidthRequest="160"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Source="{Binding Monkey.Image}"/>
+
+                </Frame>
+
+            </Grid>
+
+            <!-- Create new vertical stack layout outside grid and place there details, location and population of current monkey -->
+            <VerticalStackLayout Padding="10" Spacing="10">
+
+                <Label Text="{Binding Monkey.Details}"/>
+                <Label Text="{Binding Monkey.Location, StringFormat='Location:  {0}'}"/>
+                <Label Text="{Binding Monkey.Population, StringFormat='Population:  {0}'}"/>
+
+            </VerticalStackLayout>
+            
+        </VerticalStackLayout>
+    </ScrollView>
+    
 </ContentPage>
