@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- all info related to shell of application -->
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MonkeyFinder.AppShell"
@@ -6,9 +7,10 @@
              FlyoutBehavior="Disabled">
 
 
-
+    <!-- resource list of shell -->
     <Shell.Resources>
         <ResourceDictionary>
+            <!-- styling of shell (toolbar) -->
             <Style x:Key="BaseStyle" TargetType="Element">
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
                 <Setter Property="Shell.ForegroundColor" Value="{OnPlatform WinUI={StaticResource Primary}, Default=White}" />
@@ -25,7 +27,7 @@
     </Shell.Resources>
 
 
-
+    <!-- Define default title of app and first page displayed by app -->
     <ShellContent
         Shell.NavBarIsVisible="true"
         Title="Monkeys"

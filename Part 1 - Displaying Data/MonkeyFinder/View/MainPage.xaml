@@ -7,6 +7,12 @@
              x:DataType="viewmodel:MonkeysViewModel"
              Title="{Binding Title}"
              x:Class="MonkeyFinder.View.MainPage">
+
+    <!-- Implement tool bar button to refresh with GetClosestMonkeyCommand(found in command generator) -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="REFRESH"
+                     Command="{Binding GetMonkeysCommand}"/>
+    </ContentPage.ToolbarItems>
     
     <!-- Create grid with two columns and auto row amount -->
     <Grid ColumnDefinitions="*,*"
@@ -14,55 +20,84 @@
           RowDefinitions="*,Auto"
           RowSpacing="0">
 
-        <!-- Create collection view across both collumns which will display defined data of all monkeys stored inside observable collection of monkeys -->
-        <CollectionView BackgroundColor="Transparent"
-                        Grid.ColumnSpan="2"
-                        ItemsSource="{Binding Monkeys}"
-                        SelectionMode="None">
+        <!-- Implement pull to refresh with GetClosestMonkeyCommand(found in command generator) -->
+        <RefreshView Grid.ColumnSpan="2"
+                     Command="{Binding GetMonkeysCommand}"
+                     IsRefreshing="{Binding IsRefreshing}">
             
-            <!-- Create template what to display for each monkey -->
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:Monkey">
-                    <!-- Create second grid with one column inside collection view -->
-                    <Grid Padding="10">
-                        <!-- Inside second grid create frame for each monkey with height of 125 -->
-                        <Frame HeightRequest="125">
-                            <!-- Use gesture recognisition to make frame with monkey interactable -->
-                            <Frame.GestureRecognizers>
-                                <!-- Use tap gesture and bind it to itself, while command consisist for this from view model where function exists and command itself -->
-                                <TapGestureRecognizer CommandParameter="{Binding .}" 
-                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MonkeysViewModel}}, Path=GoToDetailsCommand}"/>
-                            </Frame.GestureRecognizers>
-                                    <!-- Create third grid with two columns with first one being 125 wide -->
-                            <Grid Padding="0" ColumnDefinitions="125, *">
+            <!-- Create collection view across both collumns which will display defined data of all monkeys stored inside observable collection of monkeys -->
+            <CollectionView BackgroundColor="Transparent"
+                            ItemsSource="{Binding Monkeys}"
+                            SelectionMode="None">
 
-                                <!-- Display image of monkey -->
-                                <Image Aspect="AspectFill"
-                                       Source="{Binding Image}"
-                                       WidthRequest="125"
-                                       HeightRequest="125"/>
+                <!-- Implement empty view with image if there is no data to display -->
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 WidthRequest="200"
+                                 HeightRequest="200">
 
-                                <!-- Create vertical stack layout in second column to display name aand location of monkey-->
-                                <VerticalStackLayout Grid.Column="1" Padding="10" VerticalOptions="Center">
+                        <Image Source="nodata.png"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               Aspect="AspectFill"/>
 
-                                    <Label Text="{Binding Name}"/>
-                                    <Label Text="{Binding Location}"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
 
-                                </VerticalStackLayout>
+                <!-- Create template what to display for each monkey -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Monkey">
+                        <!-- Create second grid with one column inside collection view -->
+                        <Grid Padding="10">
+                            <!-- Inside second grid create frame for each monkey with height of 125 -->
+                            <Frame HeightRequest="125">
+                                <!-- Use gesture recognisition to make frame with monkey interactable -->
+                                <Frame.GestureRecognizers>
+                                    <!-- Use tap gesture and bind it to itself, while command consisist for this from view model where function exists and command itself -->
+                                    <TapGestureRecognizer CommandParameter="{Binding .}" 
+                                                          Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MonkeysViewModel}}, Path=GoToDetailsCommand}"/>
+                                </Frame.GestureRecognizers>
+                                <!-- Create third grid with two columns with first one being 125 wide -->
+                                <Grid Padding="0" ColumnDefinitions="125, *">
 
-                            </Grid>
-                        </Frame>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
+                                    <!-- Display image of monkey -->
+                                    <Image Aspect="AspectFill"
+                                           Source="{Binding Image}"
+                                           WidthRequest="125"
+                                           HeightRequest="125"/>
 
-        </CollectionView>
+                                    <!-- Create vertical stack layout in second column to display name aand location of monkey-->
+                                    <VerticalStackLayout Grid.Column="1" Padding="10" VerticalOptions="Center">
 
-        <!-- Create button to call upon GetMonkeysCommand(found in command generator) when is IsNotBusy, initiates monkey view model code-->
+                                        <Label Text="{Binding Name}"/>
+                                        <Label Text="{Binding Location}"/>
+
+                                    </VerticalStackLayout>
+
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+            
+        </RefreshView>
+
+        <!-- Create button to call upon GetMonkeysCommand(found in command generator) when is IsNotBusy-->
         <Button Text="Get Monkeys"
                 Command="{Binding GetMonkeysCommand}"
                 IsEnabled="{Binding IsNotBusy}"
                 Grid.Row="1"
+                Margin="8"/>
+
+        <!-- Create button to call upon GetClosestMonkeyCommand(found in command generator) when is IsNotBusy-->
+        <Button Text="Find Closest"
+                Command="{Binding GetClosestMonkeyCommand}"
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Row="1"
+                Grid.Column="1"
                 Margin="8"/>
         
         <!-- Loading indicator when monkey data is retreived from server -->
